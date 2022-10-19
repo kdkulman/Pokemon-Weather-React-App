@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const weatherApi = {
   key: '7feef82f33ada5fa579adcdac7155beb',
@@ -6,6 +6,20 @@ const weatherApi = {
 } 
 
 function App() {
+  const [query, setQuery] = useState('');
+  const [weather, setWeather] = useState({});
+
+  const search = evt => {
+    if (evt.key === "Enter"){
+      fetch(`${weatherApi.base}weather?q=${query}&units=imperial&APPID=${weatherApi.key}`)
+      .then(res => res.json())
+      .then(result => {
+        setWeather(result);
+        setQuery('');
+        console.log(result);
+      });
+    }
+  }
 
   const dateBuilder = (d) => {
     let months = ["Jan", "Feb", "March", "April", "May", "June", "July", "Aug",
@@ -29,6 +43,9 @@ function App() {
             type='text'
             className='search-bar'
             placeholder='Search...'
+            onChange={e => setQuery(e.target.value)}
+            value={query}
+            onKeyPress= {search}
           />
         </div>
         <div className='location-box'>
@@ -38,7 +55,7 @@ function App() {
         </div>
         <div className='weather-box'>
           <div className='temp'>
-            15 c
+          67 F
           </div>
           <div className='weather'>Sunny</div>
         </div>
