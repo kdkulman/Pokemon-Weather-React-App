@@ -35,33 +35,62 @@ function App() {
     return `${day} ${date} ${month} ${year}`
   }
 
+  let wallpaper = 'App cold';
+  if (typeof weather.main == 'undefined') {
+    wallpaper = 'App cold';
+  } else if (Math.round(weather.main.temp) >= 80) {
+    wallpaper = 'App hot';
+  } else if (Math.round(weather.main.temp) >= 50)  {
+    wallpaper = 'App warm';
+  } else {
+    wallpaper = 'App cold';
+  }
+
   return (
-    <div className="App cold">
+    <div className={wallpaper}>
       <main>
         <div className='search-box'>
           <input 
             type='text'
             className='search-bar'
-            placeholder='Search...'
+            placeholder='Search a city name'
             onChange={e => setQuery(e.target.value)}
             value={query}
             onKeyPress= {search}
           />
         </div>
-        <div className='location-box'>
-          <div className='location'>New York City, US</div>
-          <div className='date'>{dateBuilder(new Date())}</div>
-
-        </div>
-        <div className='weather-box'>
-          <div className='temp'>
-          67 F
+        {(typeof weather.main != 'undefined') ? ( 
+          <div>
+            <div className='location-box'>
+              <div className='location'>{weather.name}, {weather.sys.country}</div>
+              <div className='date'>{dateBuilder(new Date())}</div>
+            </div>
+            <div className='weather-box'>
+              <div className='temp'>
+                {Math.round(weather.main.temp)}°F
+              </div>
+              <div className='weather'>{weather.weather[0].main}</div>
+            </div>
           </div>
-          <div className='weather'>Sunny</div>
-        </div>
+        ) : ('')}
       </main>
     </div>
   );  
+
 }
+
+// function rain() {
+//   return (
+//     <body class="back-row-toggle splat-toggle">
+//       <div class="rain front-row"></div>
+//       <div class="rain back-row"></div>
+//       <div class="toggles">
+//         <div class="splat-toggle toggle active">SPLAT</div>
+//         <div class="back-row-toggle toggle active">BACK<br />ROW</div>
+//         <div class="single-toggle toggle">SINGLE</div>
+//       </div>
+//     </body>
+//   );
+//}
 
 export default App;
